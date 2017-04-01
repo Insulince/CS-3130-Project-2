@@ -4,7 +4,7 @@ package project2;
 
 import java.util.Arrays;
 
-public class asdf {
+public class Quicksort {
     private static final int RANDOM = 0;
     private static final int ASCENDING = 1;
     private static final int DESCENDING = 2;
@@ -41,15 +41,15 @@ public class asdf {
         int[] right = new int[]{leftIndex, leftIndex};
 
         //2. Partition the array.
-        for (int i = leftIndex; i < rightIndex - 1; i++) {
+        for (int i = leftIndex; i < rightIndex; i++) {
             if (array[i] < pivot) {
                 int tmp = array[right[LEFT]];
                 array[right[LEFT]] = array[right[RIGHT]];
                 array[right[RIGHT]] = tmp;
 
-                left[RIGHT]++;
-                right[LEFT]++;
                 right[RIGHT]++;
+                right[LEFT]++;
+                left[RIGHT]++;
             } else {
                 right[RIGHT]++;
             }
@@ -60,8 +60,8 @@ public class asdf {
         array[rightIndex] = array[right[LEFT]];
         array[right[LEFT]] = tmp;
 
-        right[LEFT]++;
         right[RIGHT]++;
+        right[LEFT]++;
 
         //4. Repeat for left subarray recursively.
         if (left[RIGHT] - left[LEFT] > 1) {
