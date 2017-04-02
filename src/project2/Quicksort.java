@@ -29,7 +29,7 @@ public class Quicksort {
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
-        quicksortArrays[ORIGINAL][RANDOM] = quicksortRandomization(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
+        quicksortArrays[ORIGINAL][RANDOM] = quicksortMedianOf3(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
@@ -127,6 +127,50 @@ public class Quicksort {
 
     private static int[] quicksortMedianOf3(int[] array, int leftIndex, int rightIndex) {
         //1. Pick a pivot.
+        if (rightIndex - leftIndex > 2) {
+            int[] randomIndices = new int[3];
+            randomIndices[0] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[1] == randomIndices[0]) {
+                randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+            randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[2] == randomIndices[0] || randomIndices[2] == randomIndices[1]) {
+                randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+
+            int medianOf3Index;
+            final int A = 0;
+            final int B = 1;
+            final int C = 2;
+
+            if (array[randomIndices[A]] < array[randomIndices[B]]) {
+                if (array[randomIndices[B]] < array[randomIndices[C]]) {
+                    medianOf3Index = randomIndices[B];
+                } else {
+                    if (array[randomIndices[A]] < array[randomIndices[C]]) {
+                        medianOf3Index = randomIndices[C];
+                    } else {
+                        medianOf3Index = randomIndices[A];
+                    }
+                }
+            } else {
+                if (array[randomIndices[B]] < array[randomIndices[C]]) {
+                    if (array[randomIndices[A]] < array[randomIndices[C]]) {
+                        medianOf3Index = randomIndices[A];
+                    } else {
+                        medianOf3Index = randomIndices[C];
+                    }
+                } else {
+                    medianOf3Index = randomIndices[B];
+                }
+            }
+
+            int temp = array[medianOf3Index];
+            array[medianOf3Index] = array[rightIndex];
+            array[rightIndex] = temp;
+        }
+
         int pivot = array[rightIndex]; //Pivot is last element in array.
         int[] left = new int[]{leftIndex, leftIndex};
         int[] right = new int[]{leftIndex, leftIndex};
@@ -284,6 +328,6 @@ public class Quicksort {
         }
 
         //If we made it here...
-        return true; //Then this array is arrayIsSortedInAscendingOrder in ascending order. Return true.
+        return true; //Then this array is sorted in ascending order. Return true.
     }
 }
