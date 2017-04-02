@@ -29,9 +29,11 @@ public class Quicksort {
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
-        quicksortArrays[ORIGINAL][RANDOM] = quicksortOriginal(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
+        quicksortArrays[ORIGINAL][RANDOM] = quicksortRandomization(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
+
+        System.out.println(arrayIsSortedInAscendingOrder(quicksortArrays[ORIGINAL][RANDOM]));
     }
 
     private static int[] quicksortOriginal(int[] array, int leftIndex, int rightIndex) {
@@ -76,15 +78,134 @@ public class Quicksort {
         return array;
     }
 
-    private static int[] quicksortRandomization(int[] array) {
+    private static int[] quicksortRandomization(int[] array, int leftIndex, int rightIndex) {
+        //1. Pick a pivot randomly.
+        int randomIndex = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+        int temp = array[randomIndex];
+        array[randomIndex] = array[rightIndex];
+        array[rightIndex] = temp;
+
+        int pivot = array[rightIndex];
+        int[] left = new int[]{leftIndex, leftIndex};
+        int[] right = new int[]{leftIndex, leftIndex};
+
+        //2. Partition the array.
+        for (int i = leftIndex; i < rightIndex; i++) {
+            if (array[i] < pivot) {
+                int tmp = array[right[LEFT]];
+                array[right[LEFT]] = array[right[RIGHT]];
+                array[right[RIGHT]] = tmp;
+
+                right[RIGHT]++;
+                right[LEFT]++;
+                left[RIGHT]++;
+            } else {
+                right[RIGHT]++;
+            }
+        }
+
+        //3. Insert Pivot.
+        int tmp = array[rightIndex];
+        array[rightIndex] = array[right[LEFT]];
+        array[right[LEFT]] = tmp;
+
+        right[RIGHT]++;
+        right[LEFT]++;
+
+        //4. Repeat for left subarray recursively.
+        if (left[RIGHT] - left[LEFT] > 1) {
+            array = quicksortRandomization(array, left[LEFT], left[RIGHT] - 1);
+        }
+
+        //5. Repeat for right subarray recursively.
+        if (right[RIGHT] - right[LEFT] > 1) {
+            array = quicksortRandomization(array, right[LEFT], right[RIGHT] - 1);
+        }
+
         return array;
     }
 
-    private static int[] quicksortMedianOf3(int[] array) {
+    private static int[] quicksortMedianOf3(int[] array, int leftIndex, int rightIndex) {
+        //1. Pick a pivot.
+        int pivot = array[rightIndex]; //Pivot is last element in array.
+        int[] left = new int[]{leftIndex, leftIndex};
+        int[] right = new int[]{leftIndex, leftIndex};
+
+        //2. Partition the array.
+        for (int i = leftIndex; i < rightIndex; i++) {
+            if (array[i] < pivot) {
+                int tmp = array[right[LEFT]];
+                array[right[LEFT]] = array[right[RIGHT]];
+                array[right[RIGHT]] = tmp;
+
+                right[RIGHT]++;
+                right[LEFT]++;
+                left[RIGHT]++;
+            } else {
+                right[RIGHT]++;
+            }
+        }
+
+        //3. Insert Pivot.
+        int tmp = array[rightIndex];
+        array[rightIndex] = array[right[LEFT]];
+        array[right[LEFT]] = tmp;
+
+        right[RIGHT]++;
+        right[LEFT]++;
+
+        //4. Repeat for left subarray recursively.
+        if (left[RIGHT] - left[LEFT] > 1) {
+            array = quicksortMedianOf3(array, left[LEFT], left[RIGHT] - 1);
+        }
+
+        //5. Repeat for right subarray recursively.
+        if (right[RIGHT] - right[LEFT] > 1) {
+            array = quicksortMedianOf3(array, right[LEFT], right[RIGHT] - 1);
+        }
+
         return array;
     }
 
-    private static int[] quicksortMedianOf5(int[] array) {
+    private static int[] quicksortMedianOf5(int[] array, int leftIndex, int rightIndex) {
+        //1. Pick a pivot.
+        int pivot = array[rightIndex]; //Pivot is last element in array.
+        int[] left = new int[]{leftIndex, leftIndex};
+        int[] right = new int[]{leftIndex, leftIndex};
+
+        //2. Partition the array.
+        for (int i = leftIndex; i < rightIndex; i++) {
+            if (array[i] < pivot) {
+                int tmp = array[right[LEFT]];
+                array[right[LEFT]] = array[right[RIGHT]];
+                array[right[RIGHT]] = tmp;
+
+                right[RIGHT]++;
+                right[LEFT]++;
+                left[RIGHT]++;
+            } else {
+                right[RIGHT]++;
+            }
+        }
+
+        //3. Insert Pivot.
+        int tmp = array[rightIndex];
+        array[rightIndex] = array[right[LEFT]];
+        array[right[LEFT]] = tmp;
+
+        right[RIGHT]++;
+        right[LEFT]++;
+
+        //4. Repeat for left subarray recursively.
+        if (left[RIGHT] - left[LEFT] > 1) {
+            array = quicksortMedianOf5(array, left[LEFT], left[RIGHT] - 1);
+        }
+
+        //5. Repeat for right subarray recursively.
+        if (right[RIGHT] - right[LEFT] > 1) {
+            array = quicksortMedianOf5(array, right[LEFT], right[RIGHT] - 1);
+        }
+
         return array;
     }
 
@@ -152,5 +273,17 @@ public class Quicksort {
         output.append("========================================================================================================="); //Attach a lower border.
 
         System.out.println(output.toString()); //Output the completed String to the user.
+    }
+
+    //This is an extra function I added to help ensure data integrity. It checks that the passed int array is arrayIsSortedInAscendingOrder in ascending order.
+    private static boolean arrayIsSortedInAscendingOrder(final int[] array) {
+        for (int index = 1; index < array.length; index++) { //For every pair of indices in the int array (sequentially)...
+            if (array[index - 1] > array[index]) { //If the first int in this pair is greater than the second int in this pair...
+                return false; //Then this array is not arrayIsSortedInAscendingOrder in ascending order. Return false.
+            }
+        }
+
+        //If we made it here...
+        return true; //Then this array is arrayIsSortedInAscendingOrder in ascending order. Return true.
     }
 }
