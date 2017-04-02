@@ -15,6 +15,10 @@ public class Quicksort {
     private static final int LEFT = 0;
     private static final int RIGHT = 1;
 
+    public static void mdain(String[] args) {
+        System.out.println(medianOf5(new int[]{1, 2, 4, 5, 3}));
+    }
+
     public static void main(String[] args) {
         int[] randomIntArray = generateArrayData("random");
         int[] ascendingIntArray = generateArrayData("ascending");
@@ -29,7 +33,7 @@ public class Quicksort {
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
-        quicksortArrays[ORIGINAL][RANDOM] = quicksortMedianOf3(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
+        quicksortArrays[ORIGINAL][RANDOM] = quicksortMedianOf5(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
@@ -213,6 +217,34 @@ public class Quicksort {
 
     private static int[] quicksortMedianOf5(int[] array, int leftIndex, int rightIndex) {
         //1. Pick a pivot.
+        if (rightIndex - leftIndex > 4) {
+            int[] randomIndices = new int[5];
+            randomIndices[0] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[1] == randomIndices[0]) {
+                randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+            randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[2] == randomIndices[0] || randomIndices[2] == randomIndices[1]) {
+                randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+            randomIndices[3] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[3] == randomIndices[0] || randomIndices[3] == randomIndices[1] || randomIndices[3] == randomIndices[2]) {
+                randomIndices[3] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+            randomIndices[4] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            while (randomIndices[4] == randomIndices[0] || randomIndices[4] == randomIndices[1] || randomIndices[4] == randomIndices[2] || randomIndices[4] == randomIndices[3]) {
+                randomIndices[4] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
+            }
+
+            int[] randomElements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]], array[randomIndices[3]], array[randomIndices[4]]};
+            int medianOf5Index = randomIndices[indexOfElementWithValue(medianOf5(Arrays.copyOf(randomElements, randomElements.length)), randomElements)];
+
+            int temp = array[medianOf5Index];
+            array[medianOf5Index] = array[rightIndex];
+            array[rightIndex] = temp;
+        }
+
         int pivot = array[rightIndex]; //Pivot is last element in array.
         int[] left = new int[]{leftIndex, leftIndex};
         int[] right = new int[]{leftIndex, leftIndex};
@@ -329,5 +361,69 @@ public class Quicksort {
 
         //If we made it here...
         return true; //Then this array is sorted in ascending order. Return true.
+    }
+
+    private static int medianOf5(int[] array) {
+        final int A = 0;
+        final int B = 1;
+        final int C = 2;
+        final int D = 3;
+        final int E = 4;
+
+        int index = A;
+
+        if (array[A] > array[B]) {
+            int tmp = array[A];
+            array[A] = array[B];
+            array[B] = tmp;
+        }
+
+        if (array[C] > array[D]) {
+            int tmp = array[C];
+            array[C] = array[D];
+            array[D] = tmp;
+        }
+
+        if (array[C] < array[A]) {
+            int tmp = array[B];
+            array[B] = array[D];
+            array[D] = tmp;
+
+            array[C] = array[A];
+        }
+
+        array[A] = array[E];
+
+        if (array[A] > array[B]) {
+            int tmp = array[A];
+            array[A] = array[B];
+            array[B] = tmp;
+        }
+
+        if (array[A] < array[C]) {
+            int tmp = array[B];
+            array[B] = array[D];
+            array[D] = tmp;
+
+            array[A] = array[C];
+        }
+
+        if (array[A] < array[D]) {
+            index = array[A];
+        } else {
+            index = array[D];
+        }
+
+        return index;
+    }
+
+    private static int indexOfElementWithValue(int value, int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == value) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
