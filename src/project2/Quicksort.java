@@ -2,17 +2,23 @@
 
 package project2;
 
+import com.sun.xml.internal.bind.v2.model.annotation.Quick;
+
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Quicksort {
     private static final int RANDOM = 0;
     private static final int ASCENDING = 1;
     private static final int DESCENDING = 2;
+
     private static final int ORIGINAL = 0;
     private static final int RANDOMIZATION = 1;
     private static final int MEDIAN_OF_3 = 2;
     private static final int MEDIAN_OF_5 = 3;
+
     private static final int LEFT_BOUND = 0;
     private static final int RIGHT_BOUND = 1;
 
@@ -21,10 +27,12 @@ public class Quicksort {
         int randomIntArrayComparisons = 0;
         int randomIntArraySwaps = 0;
         long randomIntArrayDuration = 0;
+
         int[] ascendingIntArray = generateArrayData("ascending");
         int ascendingIntArrayComparisons = 0;
         int ascendingIntArraySwaps = 0;
         long ascendingIntArrayDuration = 0;
+
         int[] descendingIntArray = generateArrayData("descending");
         int descendingIntArrayComparisons = 0;
         int descendingIntArraySwaps = 0;
@@ -34,49 +42,117 @@ public class Quicksort {
         int[] originalQuicksortComparisons = new int[]{randomIntArrayComparisons, ascendingIntArrayComparisons, descendingIntArrayComparisons};
         int[] originalQuicksortSwaps = new int[]{randomIntArraySwaps, ascendingIntArraySwaps, descendingIntArraySwaps};
         long[] originalQuicksortDurations = new long[]{randomIntArrayDuration, ascendingIntArrayDuration, descendingIntArrayDuration};
-        int[][] randomizationQuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+
+        int[][] randomizationQuicksortArrays = new int[][]{Arrays.copyOf(randomIntArray, randomIntArray.length), Arrays.copyOf(ascendingIntArray, ascendingIntArray.length), Arrays.copyOf(descendingIntArray, descendingIntArray.length)};
         int[] randomizationQuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
         int[] randomizationQuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
         long[] randomizationQuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
-        int[][] medianOf3QuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+
+        int[][] medianOf3QuicksortArrays = new int[][]{Arrays.copyOf(randomIntArray, randomIntArray.length), Arrays.copyOf(ascendingIntArray, ascendingIntArray.length), Arrays.copyOf(descendingIntArray, descendingIntArray.length)};
         int[] medianOf3QuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
         int[] medianOf3QuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
         long[] medianOf3QuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
-        int[][] medianOf5QuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+
+        int[][] medianOf5QuicksortArrays = new int[][]{Arrays.copyOf(randomIntArray, randomIntArray.length), Arrays.copyOf(ascendingIntArray, ascendingIntArray.length), Arrays.copyOf(descendingIntArray, descendingIntArray.length)};
         int[] medianOf5QuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
         int[] medianOf5QuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
         long[] medianOf5QuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
 
         QuicksortObject[][] quicksortObjects = new QuicksortObject[][]{
                 new QuicksortObject[]{
-                        new QuicksortObject(originalQuicksortArrays[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortDurations[RANDOM]),
-                        new QuicksortObject(originalQuicksortArrays[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortDurations[ASCENDING]),
-                        new QuicksortObject(originalQuicksortArrays[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortDurations[DESCENDING])
+                        new QuicksortObject("Original Quicksort on Random Array", originalQuicksortArrays[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortSwaps[RANDOM], originalQuicksortDurations[RANDOM]),
+                        new QuicksortObject("Original Quicksort on Array in Ascending Order", originalQuicksortArrays[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortSwaps[ASCENDING], originalQuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Original Quicksort on Array in Descending Order", originalQuicksortArrays[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortSwaps[DESCENDING], originalQuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject(randomizationQuicksortArrays[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortDurations[RANDOM]),
-                        new QuicksortObject(randomizationQuicksortArrays[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortDurations[ASCENDING]),
-                        new QuicksortObject(randomizationQuicksortArrays[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortDurations[DESCENDING])
+                        new QuicksortObject("Randomization Quicksort on Random Array", randomizationQuicksortArrays[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortSwaps[RANDOM], randomizationQuicksortDurations[RANDOM]),
+                        new QuicksortObject("Randomization Quicksort on Array in Ascending Order", randomizationQuicksortArrays[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortSwaps[ASCENDING], randomizationQuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Randomization Quicksort on Array in Descending Order", randomizationQuicksortArrays[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortSwaps[DESCENDING], randomizationQuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject(medianOf3QuicksortArrays[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortDurations[RANDOM]),
-                        new QuicksortObject(medianOf3QuicksortArrays[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortDurations[ASCENDING]),
-                        new QuicksortObject(medianOf3QuicksortArrays[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortDurations[DESCENDING])
+                        new QuicksortObject("Median of 3 Quicksort on Random Array", medianOf3QuicksortArrays[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortSwaps[RANDOM], medianOf3QuicksortDurations[RANDOM]),
+                        new QuicksortObject("Median of 3 Quicksort on Array in Ascending Order", medianOf3QuicksortArrays[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortSwaps[ASCENDING], medianOf3QuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Median of 3 Quicksort on Array in Descending Order", medianOf3QuicksortArrays[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortSwaps[DESCENDING], medianOf3QuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject(medianOf5QuicksortArrays[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortDurations[RANDOM]),
-                        new QuicksortObject(medianOf5QuicksortArrays[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortDurations[ASCENDING]),
-                        new QuicksortObject(medianOf5QuicksortArrays[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortDurations[DESCENDING])
+                        new QuicksortObject("Median of 5 Quicksort on Random Array", medianOf5QuicksortArrays[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortSwaps[RANDOM], medianOf5QuicksortDurations[RANDOM]),
+                        new QuicksortObject("Median of 5 Quicksort on Array in Ascending Order", medianOf5QuicksortArrays[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortSwaps[ASCENDING], medianOf5QuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Median of 5 Quicksort on Array in Descending Order", medianOf5QuicksortArrays[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortSwaps[DESCENDING], medianOf5QuicksortDurations[DESCENDING])
                 },
         };
 
-        displayArrayData(quicksortObjects[ORIGINAL][RANDOM].array);
+        System.out.println("Array containing 1000 randomly generated integers between 1 and 1000 (inclusive) used in each of the implementations of Quicksort:");
+        displayArrayData(quicksortObjects[ORIGINAL][RANDOM]);
 
+        System.out.println("\n========== ORIGINAL QUICKSORT IMPLEMENTATION ==========");
+
+        introduce(quicksortObjects[ORIGINAL][RANDOM]);
         quicksortOriginal(quicksortObjects[ORIGINAL][RANDOM]);
+        displayResultsFor(quicksortObjects[ORIGINAL][RANDOM]);
+        displayArrayData(quicksortObjects[ORIGINAL][RANDOM]);
 
-        displayArrayData(quicksortObjects[ORIGINAL][RANDOM].array);
+        introduce(quicksortObjects[ORIGINAL][ASCENDING]);
+        quicksortOriginal(quicksortObjects[ORIGINAL][ASCENDING]);
+        displayResultsFor(quicksortObjects[ORIGINAL][ASCENDING]);
+        displayArrayData(quicksortObjects[ORIGINAL][ASCENDING]);
 
-        System.out.println(arrayIsSortedInAscendingOrder(quicksortObjects[ORIGINAL][RANDOM].array));
+        introduce(quicksortObjects[ORIGINAL][DESCENDING]);
+        quicksortOriginal(quicksortObjects[ORIGINAL][DESCENDING]);
+        displayResultsFor(quicksortObjects[ORIGINAL][DESCENDING]);
+        displayArrayData(quicksortObjects[ORIGINAL][DESCENDING]);
+
+        System.out.println("\n========== RANDOMIZATION QUICKSORT IMPLEMENTATION ==========");
+
+        introduce(quicksortObjects[RANDOMIZATION][RANDOM]);
+        quicksortRandomization(quicksortObjects[RANDOMIZATION][RANDOM]);
+        displayResultsFor(quicksortObjects[RANDOMIZATION][RANDOM]);
+        displayArrayData(quicksortObjects[RANDOMIZATION][RANDOM]);
+
+        introduce(quicksortObjects[RANDOMIZATION][ASCENDING]);
+        quicksortRandomization(quicksortObjects[RANDOMIZATION][ASCENDING]);
+        displayResultsFor(quicksortObjects[RANDOMIZATION][ASCENDING]);
+        displayArrayData(quicksortObjects[RANDOMIZATION][ASCENDING]);
+
+        introduce(quicksortObjects[RANDOMIZATION][DESCENDING]);
+        quicksortRandomization(quicksortObjects[RANDOMIZATION][DESCENDING]);
+        displayResultsFor(quicksortObjects[RANDOMIZATION][DESCENDING]);
+        displayArrayData(quicksortObjects[RANDOMIZATION][DESCENDING]);
+
+        System.out.println("\n========= MEDIAN OF 3 QUICKSORT IMPLEMENTATION ==========");
+
+        introduce(quicksortObjects[MEDIAN_OF_3][RANDOM]);
+        quicksortMedianOf3(quicksortObjects[MEDIAN_OF_3][RANDOM]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_3][RANDOM]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_3][RANDOM]);
+
+        introduce(quicksortObjects[MEDIAN_OF_3][ASCENDING]);
+        quicksortMedianOf3(quicksortObjects[MEDIAN_OF_3][ASCENDING]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_3][ASCENDING]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_3][ASCENDING]);
+
+        introduce(quicksortObjects[MEDIAN_OF_3][DESCENDING]);
+        quicksortMedianOf3(quicksortObjects[MEDIAN_OF_3][DESCENDING]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_3][DESCENDING]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_3][DESCENDING]);
+
+        System.out.println("\n========== MEDIAN OF 5 QUICKSORT IMPLEMENTATION ==========");
+
+        introduce(quicksortObjects[MEDIAN_OF_5][RANDOM]);
+        quicksortMedianOf5(quicksortObjects[MEDIAN_OF_5][RANDOM]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_5][RANDOM]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_5][RANDOM]);
+
+        introduce(quicksortObjects[MEDIAN_OF_5][ASCENDING]);
+        quicksortMedianOf5(quicksortObjects[MEDIAN_OF_5][ASCENDING]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_5][ASCENDING]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_5][ASCENDING]);
+
+        introduce(quicksortObjects[MEDIAN_OF_5][DESCENDING]);
+        quicksortMedianOf5(quicksortObjects[MEDIAN_OF_5][DESCENDING]);
+        displayResultsFor(quicksortObjects[MEDIAN_OF_5][DESCENDING]);
+        displayArrayData(quicksortObjects[MEDIAN_OF_5][DESCENDING]);
+
+        displayTotalResults(quicksortObjects);
     }
 
     private static void quicksortOriginal(QuicksortObject quicksortObject) {
@@ -310,7 +386,7 @@ public class Quicksort {
         //5. Repeat for greaterValues subarray recursively.
         if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
             bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
-           quicksortMedianOf5(quicksortObject, bounds);
+            quicksortMedianOf5(quicksortObject, bounds);
         }
     }
 
@@ -401,7 +477,13 @@ public class Quicksort {
             medianOf5Index = D;
         }
 
-        return randomIndices[medianOf5Index];
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[medianOf5Index] == array[randomIndices[i]]) {
+                    return randomIndices[i];
+            }
+        }
+
+        return -1;
     }
 
     //This function is responsible for randomly generating the data. All hard coded values are per the project specification.
@@ -432,7 +514,9 @@ public class Quicksort {
     }
 
     //This function is responsible for outputting the data to the user in a meaningful way. Hardcoded values are per the project specification.
-    private static void displayArrayData(final int[] array) {
+    private static void displayArrayData(final QuicksortObject quicksortObject) {
+        final int[] array = quicksortObject.array;
+
         StringBuilder output; //This is the object responsible for creating the String that will ultimately be displayed to the user.
         int rowCounter = 0; //This variable is used to display the multiples of 20 along the rows.
 
@@ -471,7 +555,9 @@ public class Quicksort {
     }
 
     //This is an extra function I added to help ensure data integrity. It checks that the passed int array is arrayIsSortedInAscendingOrder in ascending order.
-    private static boolean arrayIsSortedInAscendingOrder(final int[] array) {
+    private static boolean arrayIsSortedInAscendingOrder(final QuicksortObject quicksortObject) {
+        final int[] array = quicksortObject.array;
+
         for (int index = 1; index < array.length; index++) { //For every pair of indices in the int array (sequentially)...
             if (array[index - 1] > array[index]) { //If the first int in this pair is greater than the second int in this pair...
                 return false; //Then this array is not arrayIsSortedInAscendingOrder in ascending order. Return false.
@@ -481,15 +567,71 @@ public class Quicksort {
         //If we made it here...
         return true; //Then this array is sorted in ascending order. Return true.
     }
+
+    private static void displayResultsFor(QuicksortObject quicksortObject) {
+        System.out.println(" done.");
+        System.out.println("Results:");
+        System.out.println("----- Comparisons: " + quicksortObject.comparisons);
+        System.out.println("----- Swaps: " + quicksortObject.swaps);
+        System.out.println("----- Duration: " + quicksortObject.duration / 1000000.0);
+        System.out.println("----- Resulting Array is sorted: " + arrayIsSortedInAscendingOrder(quicksortObject));
+        System.out.println("----- Resulting Array:");
+    }
+
+    private static void displayTotalResults(QuicksortObject[][] quicksortObjects) {
+        QuicksortObject[] collapsedQuicksortObjectArray = new QuicksortObject[]{
+                quicksortObjects[0][0],
+                quicksortObjects[0][1],
+                quicksortObjects[0][2],
+                quicksortObjects[1][0],
+                quicksortObjects[1][1],
+                quicksortObjects[1][2],
+                quicksortObjects[2][0],
+                quicksortObjects[2][1],
+                quicksortObjects[2][2],
+                quicksortObjects[3][0],
+                quicksortObjects[3][1],
+                quicksortObjects[3][2]
+        };
+
+        System.out.println("\n========== TOTAL RESULTS ==========");
+
+        System.out.println("Number of comparisons in each Quicksort in ascending order: ");
+        Arrays.stream(collapsedQuicksortObjectArray)
+                .sorted(Comparator.comparingInt(x -> x.comparisons))
+                .map(x -> x.comparisons + " - " + x.name)
+                .forEach(System.out::println);
+        System.out.println();
+
+        System.out.println("Number of swaps in each Quicksort in ascending order:");
+        Arrays.stream(collapsedQuicksortObjectArray)
+                .sorted(Comparator.comparingInt(x -> x.swaps))
+                .map(x -> x.swaps + " - " + x.name)
+                .forEach(System.out::println);
+        System.out.println();
+
+        System.out.println("Duration (in milliseconds) in each Quicksort in ascending order:");
+        Arrays.stream(collapsedQuicksortObjectArray)
+                .sorted(Comparator.comparingLong(x2 -> x2.duration))
+                .map(x -> x.duration / 1000000.0 + " - " + x.name)
+                .forEach(System.out::println);
+        System.out.println();
+    }
+
+    private static void introduce(QuicksortObject quicksortObject) {
+        System.out.print("\nBegginning " + quicksortObject.name + "...");
+    }
 }
 
 class QuicksortObject {
-    public int[] array;
-    public int comparisons;
-    public int swaps;
-    public long duration;
+    String name;
+    int[] array;
+    int comparisons;
+    int swaps;
+    long duration;
 
-    QuicksortObject(int[] array, int comparisons, int swaps, long duration) {
+    QuicksortObject(String name, int[] array, int comparisons, int swaps, long duration) {
+        this.name = name;
         this.array = array;
         this.comparisons = comparisons;
         this.swaps = swaps;
