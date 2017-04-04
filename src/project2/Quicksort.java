@@ -18,31 +18,76 @@ public class Quicksort {
 
     public static void main(String[] args) {
         int[] randomIntArray = generateArrayData("random");
+        int randomIntArrayComparisons = 0;
+        int randomIntArraySwaps = 0;
+        long randomIntArrayDuration = 0;
         int[] ascendingIntArray = generateArrayData("ascending");
+        int ascendingIntArrayComparisons = 0;
+        int ascendingIntArraySwaps = 0;
+        long ascendingIntArrayDuration = 0;
         int[] descendingIntArray = generateArrayData("descending");
+        int descendingIntArrayComparisons = 0;
+        int descendingIntArraySwaps = 0;
+        long descendingIntArrayDuration = 0;
 
         int[][] originalQuicksortArrays = new int[][]{randomIntArray, ascendingIntArray, descendingIntArray};
+        int[] originalQuicksortComparisons = new int[]{randomIntArrayComparisons, ascendingIntArrayComparisons, descendingIntArrayComparisons};
+        int[] originalQuicksortSwaps = new int[]{randomIntArraySwaps, ascendingIntArraySwaps, descendingIntArraySwaps};
+        long[] originalQuicksortDurations = new long[]{randomIntArrayDuration, ascendingIntArrayDuration, descendingIntArrayDuration};
         int[][] randomizationQuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+        int[] randomizationQuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
+        int[] randomizationQuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
+        long[] randomizationQuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
         int[][] medianOf3QuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+        int[] medianOf3QuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
+        int[] medianOf3QuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
+        long[] medianOf3QuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
         int[][] medianOf5QuicksortArrays = Arrays.copyOf(originalQuicksortArrays, originalQuicksortArrays.length);
+        int[] medianOf5QuicksortComparisons = Arrays.copyOf(originalQuicksortComparisons, originalQuicksortComparisons.length);
+        int[] medianOf5QuicksortSwaps = Arrays.copyOf(originalQuicksortSwaps, originalQuicksortSwaps.length);
+        long[] medianOf5QuicksortDurations = Arrays.copyOf(originalQuicksortDurations, originalQuicksortDurations.length);
 
-        int[][][] quicksortArrays = new int[][][]{originalQuicksortArrays, randomizationQuicksortArrays, medianOf3QuicksortArrays, medianOf5QuicksortArrays};
+        QuicksortObject[][] quicksortObjects = new QuicksortObject[][]{
+                new QuicksortObject[]{
+                        new QuicksortObject(originalQuicksortArrays[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortDurations[RANDOM]),
+                        new QuicksortObject(originalQuicksortArrays[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortDurations[ASCENDING]),
+                        new QuicksortObject(originalQuicksortArrays[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortDurations[DESCENDING])
+                },
+                new QuicksortObject[]{
+                        new QuicksortObject(randomizationQuicksortArrays[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortDurations[RANDOM]),
+                        new QuicksortObject(randomizationQuicksortArrays[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortDurations[ASCENDING]),
+                        new QuicksortObject(randomizationQuicksortArrays[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortDurations[DESCENDING])
+                },
+                new QuicksortObject[]{
+                        new QuicksortObject(medianOf3QuicksortArrays[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortDurations[RANDOM]),
+                        new QuicksortObject(medianOf3QuicksortArrays[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortDurations[ASCENDING]),
+                        new QuicksortObject(medianOf3QuicksortArrays[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortDurations[DESCENDING])
+                },
+                new QuicksortObject[]{
+                        new QuicksortObject(medianOf5QuicksortArrays[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortDurations[RANDOM]),
+                        new QuicksortObject(medianOf5QuicksortArrays[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortDurations[ASCENDING]),
+                        new QuicksortObject(medianOf5QuicksortArrays[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortDurations[DESCENDING])
+                },
+        };
 
-        displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
+        displayArrayData(quicksortObjects[ORIGINAL][RANDOM].array);
 
-        quicksortArrays[ORIGINAL][RANDOM] = quicksortOriginal(quicksortArrays[ORIGINAL][RANDOM]);
+        quicksortOriginal(quicksortObjects[ORIGINAL][RANDOM]);
 
-        displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
+        displayArrayData(quicksortObjects[ORIGINAL][RANDOM].array);
 
-        System.out.println(arrayIsSortedInAscendingOrder(quicksortArrays[ORIGINAL][RANDOM]));
+        System.out.println(arrayIsSortedInAscendingOrder(quicksortObjects[ORIGINAL][RANDOM].array));
     }
 
-    private static int[] quicksortOriginal(int[] array) {
-        return quicksortOriginal(array, new int[]{0, array.length - 1});
+    private static void quicksortOriginal(QuicksortObject quicksortObject) {
+        quicksortObject.duration = System.nanoTime();
+        quicksortOriginal(quicksortObject, new int[]{0, quicksortObject.array.length - 1});
+        quicksortObject.duration = System.nanoTime() - quicksortObject.duration;
     }
 
-    private static int[] quicksortOriginal(int[] array, int[] bounds) {
+    private static void quicksortOriginal(QuicksortObject quicksortObject, int[] bounds) {
         int temp;
+        int[] array = quicksortObject.array;
         int leftBound = bounds[LEFT_BOUND];
         int rightBound = bounds[RIGHT_BOUND];
 
@@ -77,24 +122,25 @@ public class Quicksort {
         //4. Repeat for lesserValues subarray recursively.
         if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
             bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortOriginal(quicksortObject, bounds);
         }
 
         //5. Repeat for greaterValues subarray recursively.
         if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
             bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortOriginal(quicksortObject, bounds);
         }
-
-        return array;
     }
 
-    private static int[] quicksortRandomization(int[] array) {
-        return quicksortRandomization(array, new int[]{0, array.length - 1});
+    private static void quicksortRandomization(QuicksortObject quicksortObject) {
+        quicksortObject.duration = System.nanoTime();
+        quicksortRandomization(quicksortObject, new int[]{0, quicksortObject.array.length - 1});
+        quicksortObject.duration = System.nanoTime() - quicksortObject.duration;
     }
 
-    private static int[] quicksortRandomization(int[] array, int[] bounds) {
+    private static void quicksortRandomization(QuicksortObject quicksortObject, int[] bounds) {
         int temp;
+        int[] array = quicksortObject.array;
         int leftBound = bounds[LEFT_BOUND];
         int rightBound = bounds[RIGHT_BOUND];
 
@@ -134,24 +180,25 @@ public class Quicksort {
         //4. Repeat for lesserValues subarray recursively.
         if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
             bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortRandomization(quicksortObject, bounds);
         }
 
         //5. Repeat for greaterValues subarray recursively.
         if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
             bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortRandomization(quicksortObject, bounds);
         }
-
-        return array;
     }
 
-    private static int[] quicksortMedianOf3(int[] array) {
-        return quicksortMedianOf3(array, new int[]{0, array.length - 1});
+    private static void quicksortMedianOf3(QuicksortObject quicksortObject) {
+        quicksortObject.duration = System.nanoTime();
+        quicksortMedianOf3(quicksortObject, new int[]{0, quicksortObject.array.length - 1});
+        quicksortObject.duration = System.nanoTime() - quicksortObject.duration;
     }
 
-    private static int[] quicksortMedianOf3(int[] array, int[] bounds) {
+    private static void quicksortMedianOf3(QuicksortObject quicksortObject, int[] bounds) {
         int temp;
+        int[] array = quicksortObject.array;
         int leftBound = bounds[LEFT_BOUND];
         int rightBound = bounds[RIGHT_BOUND];
 
@@ -195,24 +242,25 @@ public class Quicksort {
         //4. Repeat for lesserValues subarray recursively.
         if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
             bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortMedianOf3(quicksortObject, bounds);
         }
 
         //5. Repeat for greaterValues subarray recursively.
         if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
             bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortMedianOf3(quicksortObject, bounds);
         }
-
-        return array;
     }
 
-    private static int[] quicksortMedianOf5(int[] array) {
-        return quicksortMedianOf5(array, new int[]{0, array.length - 1});
+    private static void quicksortMedianOf5(QuicksortObject quicksortObject) {
+        quicksortObject.duration = System.nanoTime();
+        quicksortMedianOf5(quicksortObject, new int[]{0, quicksortObject.array.length - 1});
+        quicksortObject.duration = System.nanoTime() - quicksortObject.duration;
     }
 
-    private static int[] quicksortMedianOf5(int[] array, int[] bounds) {
+    private static void quicksortMedianOf5(QuicksortObject quicksortObject, int[] bounds) {
         int temp;
+        int[] array = quicksortObject.array;
         int leftBound = bounds[LEFT_BOUND];
         int rightBound = bounds[RIGHT_BOUND];
 
@@ -256,16 +304,14 @@ public class Quicksort {
         //4. Repeat for lesserValues subarray recursively.
         if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
             bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+            quicksortMedianOf5(quicksortObject, bounds);
         }
 
         //5. Repeat for greaterValues subarray recursively.
         if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
             bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
-            array = quicksortOriginal(array, bounds);
+           quicksortMedianOf5(quicksortObject, bounds);
         }
-
-        return array;
     }
 
     private static int medianOf3Index(int[] array, int[] randomIndices) {
@@ -434,5 +480,19 @@ public class Quicksort {
 
         //If we made it here...
         return true; //Then this array is sorted in ascending order. Return true.
+    }
+}
+
+class QuicksortObject {
+    public int[] array;
+    public int comparisons;
+    public int swaps;
+    public long duration;
+
+    QuicksortObject(int[] array, int comparisons, int swaps, long duration) {
+        this.array = array;
+        this.comparisons = comparisons;
+        this.swaps = swaps;
+        this.duration = duration;
     }
 }
