@@ -3,6 +3,7 @@
 package project2;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Quicksort {
     private static final int RANDOM = 0;
@@ -12,12 +13,8 @@ public class Quicksort {
     private static final int RANDOMIZATION = 1;
     private static final int MEDIAN_OF_3 = 2;
     private static final int MEDIAN_OF_5 = 3;
-    private static final int LEFT = 0;
-    private static final int RIGHT = 1;
-
-    public static void mdain(String[] args) {
-        System.out.println(medianOf5(new int[]{1, 2, 4, 5, 3}));
-    }
+    private static final int LEFT_BOUND = 0;
+    private static final int RIGHT_BOUND = 1;
 
     public static void main(String[] args) {
         int[] randomIntArray = generateArrayData("random");
@@ -33,256 +30,332 @@ public class Quicksort {
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
-        quicksortArrays[ORIGINAL][RANDOM] = quicksortMedianOf5(quicksortArrays[ORIGINAL][RANDOM], 0, quicksortArrays[ORIGINAL][RANDOM].length - 1);
+        quicksortArrays[ORIGINAL][RANDOM] = quicksortOriginal(quicksortArrays[ORIGINAL][RANDOM]);
 
         displayArrayData(quicksortArrays[ORIGINAL][RANDOM]);
 
         System.out.println(arrayIsSortedInAscendingOrder(quicksortArrays[ORIGINAL][RANDOM]));
     }
 
-    private static int[] quicksortOriginal(int[] array, int leftIndex, int rightIndex) {
+    private static int[] quicksortOriginal(int[] array) {
+        return quicksortOriginal(array, new int[]{0, array.length - 1});
+    }
+
+    private static int[] quicksortOriginal(int[] array, int[] bounds) {
+        int temp;
+        int leftBound = bounds[LEFT_BOUND];
+        int rightBound = bounds[RIGHT_BOUND];
+
         //1. Pick a pivot.
-        int pivot = array[rightIndex]; //Pivot is last element in array.
-        int[] left = new int[]{leftIndex, leftIndex};
-        int[] right = new int[]{leftIndex, leftIndex};
+        int pivot = array[rightBound]; //Pivot is last element in array.
+        int[] lesserValues = new int[]{leftBound, leftBound};
+        int[] greaterValues = new int[]{leftBound, leftBound};
 
         //2. Partition the array.
-        for (int i = leftIndex; i < rightIndex; i++) {
-            if (array[i] < pivot) {
-                int tmp = array[right[LEFT]];
-                array[right[LEFT]] = array[right[RIGHT]];
-                array[right[RIGHT]] = tmp;
+        for (int currentIndex = leftBound; currentIndex < rightBound; currentIndex++) {
+            if (array[currentIndex] < pivot) {
+                temp = array[greaterValues[LEFT_BOUND]];
+                array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
+                array[greaterValues[RIGHT_BOUND]] = temp;
 
-                right[RIGHT]++;
-                right[LEFT]++;
-                left[RIGHT]++;
+                lesserValues[RIGHT_BOUND]++;
+                greaterValues[LEFT_BOUND]++;
+                greaterValues[RIGHT_BOUND]++;
             } else {
-                right[RIGHT]++;
+                greaterValues[RIGHT_BOUND]++;
             }
         }
 
         //3. Insert Pivot.
-        int tmp = array[rightIndex];
-        array[rightIndex] = array[right[LEFT]];
-        array[right[LEFT]] = tmp;
+        temp = array[rightBound];
+        array[rightBound] = array[greaterValues[LEFT_BOUND]];
+        array[greaterValues[LEFT_BOUND]] = temp;
 
-        right[RIGHT]++;
-        right[LEFT]++;
+        greaterValues[RIGHT_BOUND]++;
+        greaterValues[LEFT_BOUND]++;
 
-        //4. Repeat for left subarray recursively.
-        if (left[RIGHT] - left[LEFT] > 1) {
-            array = quicksortOriginal(array, left[LEFT], left[RIGHT] - 1);
+        //4. Repeat for lesserValues subarray recursively.
+        if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
-        //5. Repeat for right subarray recursively.
-        if (right[RIGHT] - right[LEFT] > 1) {
-            array = quicksortOriginal(array, right[LEFT], right[RIGHT] - 1);
+        //5. Repeat for greaterValues subarray recursively.
+        if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
         return array;
     }
 
-    private static int[] quicksortRandomization(int[] array, int leftIndex, int rightIndex) {
+    private static int[] quicksortRandomization(int[] array) {
+        return quicksortRandomization(array, new int[]{0, array.length - 1});
+    }
+
+    private static int[] quicksortRandomization(int[] array, int[] bounds) {
+        int temp;
+        int leftBound = bounds[LEFT_BOUND];
+        int rightBound = bounds[RIGHT_BOUND];
+
         //1. Pick a pivot randomly.
-        int randomIndex = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-        int temp = array[randomIndex];
-        array[randomIndex] = array[rightIndex];
-        array[rightIndex] = temp;
+        int randomIndex = (int) (Math.random() * (rightBound - leftBound + 1)) + leftBound;
+        temp = array[randomIndex];
+        array[randomIndex] = array[rightBound];
+        array[rightBound] = temp;
 
-        int pivot = array[rightIndex];
-        int[] left = new int[]{leftIndex, leftIndex};
-        int[] right = new int[]{leftIndex, leftIndex};
+        int pivot = array[rightBound];
+        int[] lesserValues = new int[]{leftBound, leftBound};
+        int[] greaterValues = new int[]{leftBound, leftBound};
 
         //2. Partition the array.
-        for (int i = leftIndex; i < rightIndex; i++) {
-            if (array[i] < pivot) {
-                int tmp = array[right[LEFT]];
-                array[right[LEFT]] = array[right[RIGHT]];
-                array[right[RIGHT]] = tmp;
+        for (int currentIndex = leftBound; currentIndex < rightBound; currentIndex++) {
+            if (array[currentIndex] < pivot) {
+                temp = array[greaterValues[LEFT_BOUND]];
+                array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
+                array[greaterValues[RIGHT_BOUND]] = temp;
 
-                right[RIGHT]++;
-                right[LEFT]++;
-                left[RIGHT]++;
+                lesserValues[RIGHT_BOUND]++;
+                greaterValues[LEFT_BOUND]++;
+                greaterValues[RIGHT_BOUND]++;
             } else {
-                right[RIGHT]++;
+                greaterValues[RIGHT_BOUND]++;
             }
         }
 
         //3. Insert Pivot.
-        int tmp = array[rightIndex];
-        array[rightIndex] = array[right[LEFT]];
-        array[right[LEFT]] = tmp;
+        temp = array[rightBound];
+        array[rightBound] = array[greaterValues[LEFT_BOUND]];
+        array[greaterValues[LEFT_BOUND]] = temp;
 
-        right[RIGHT]++;
-        right[LEFT]++;
+        greaterValues[RIGHT_BOUND]++;
+        greaterValues[LEFT_BOUND]++;
 
-        //4. Repeat for left subarray recursively.
-        if (left[RIGHT] - left[LEFT] > 1) {
-            array = quicksortRandomization(array, left[LEFT], left[RIGHT] - 1);
+        //4. Repeat for lesserValues subarray recursively.
+        if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
-        //5. Repeat for right subarray recursively.
-        if (right[RIGHT] - right[LEFT] > 1) {
-            array = quicksortRandomization(array, right[LEFT], right[RIGHT] - 1);
+        //5. Repeat for greaterValues subarray recursively.
+        if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
         return array;
     }
 
-    private static int[] quicksortMedianOf3(int[] array, int leftIndex, int rightIndex) {
+    private static int[] quicksortMedianOf3(int[] array) {
+        return quicksortMedianOf3(array, new int[]{0, array.length - 1});
+    }
+
+    private static int[] quicksortMedianOf3(int[] array, int[] bounds) {
+        int temp;
+        int leftBound = bounds[LEFT_BOUND];
+        int rightBound = bounds[RIGHT_BOUND];
+
         //1. Pick a pivot.
-        if (rightIndex - leftIndex > 2) {
-            int[] randomIndices = new int[3];
-            randomIndices[0] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[1] == randomIndices[0]) {
-                randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
-            randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[2] == randomIndices[0] || randomIndices[2] == randomIndices[1]) {
-                randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
+        if (rightBound - leftBound > 2) {
+            final int[] randomIndices = new Random().ints(leftBound, rightBound + 1).distinct().limit(3).toArray();
+            int medianOf3Index = medianOf3Index(array, randomIndices);
 
-            int medianOf3Index;
-            final int A = 0;
-            final int B = 1;
-            final int C = 2;
-
-            if (array[randomIndices[A]] < array[randomIndices[B]]) {
-                if (array[randomIndices[B]] < array[randomIndices[C]]) {
-                    medianOf3Index = randomIndices[B];
-                } else {
-                    if (array[randomIndices[A]] < array[randomIndices[C]]) {
-                        medianOf3Index = randomIndices[C];
-                    } else {
-                        medianOf3Index = randomIndices[A];
-                    }
-                }
-            } else {
-                if (array[randomIndices[B]] < array[randomIndices[C]]) {
-                    if (array[randomIndices[A]] < array[randomIndices[C]]) {
-                        medianOf3Index = randomIndices[A];
-                    } else {
-                        medianOf3Index = randomIndices[C];
-                    }
-                } else {
-                    medianOf3Index = randomIndices[B];
-                }
-            }
-
-            int temp = array[medianOf3Index];
-            array[medianOf3Index] = array[rightIndex];
-            array[rightIndex] = temp;
+            temp = array[medianOf3Index];
+            array[medianOf3Index] = array[rightBound];
+            array[rightBound] = temp;
         }
 
-        int pivot = array[rightIndex]; //Pivot is last element in array.
-        int[] left = new int[]{leftIndex, leftIndex};
-        int[] right = new int[]{leftIndex, leftIndex};
+        int pivot = array[rightBound]; //Pivot is last element in array.
+        int[] lesserValues = new int[]{leftBound, leftBound};
+        int[] greaterValues = new int[]{leftBound, leftBound};
 
         //2. Partition the array.
-        for (int i = leftIndex; i < rightIndex; i++) {
-            if (array[i] < pivot) {
-                int tmp = array[right[LEFT]];
-                array[right[LEFT]] = array[right[RIGHT]];
-                array[right[RIGHT]] = tmp;
+        for (int currentIndex = leftBound; currentIndex < rightBound; currentIndex++) {
+            if (array[currentIndex] < pivot) {
+                temp = array[greaterValues[LEFT_BOUND]];
+                array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
+                array[greaterValues[RIGHT_BOUND]] = temp;
 
-                right[RIGHT]++;
-                right[LEFT]++;
-                left[RIGHT]++;
+                lesserValues[RIGHT_BOUND]++;
+                greaterValues[LEFT_BOUND]++;
+                greaterValues[RIGHT_BOUND]++;
             } else {
-                right[RIGHT]++;
+                greaterValues[RIGHT_BOUND]++;
             }
         }
 
         //3. Insert Pivot.
-        int tmp = array[rightIndex];
-        array[rightIndex] = array[right[LEFT]];
-        array[right[LEFT]] = tmp;
+        temp = array[rightBound];
+        array[rightBound] = array[greaterValues[LEFT_BOUND]];
+        array[greaterValues[LEFT_BOUND]] = temp;
 
-        right[RIGHT]++;
-        right[LEFT]++;
+        greaterValues[RIGHT_BOUND]++;
+        greaterValues[LEFT_BOUND]++;
 
-        //4. Repeat for left subarray recursively.
-        if (left[RIGHT] - left[LEFT] > 1) {
-            array = quicksortMedianOf3(array, left[LEFT], left[RIGHT] - 1);
+        //4. Repeat for lesserValues subarray recursively.
+        if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
-        //5. Repeat for right subarray recursively.
-        if (right[RIGHT] - right[LEFT] > 1) {
-            array = quicksortMedianOf3(array, right[LEFT], right[RIGHT] - 1);
+        //5. Repeat for greaterValues subarray recursively.
+        if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
         return array;
     }
 
-    private static int[] quicksortMedianOf5(int[] array, int leftIndex, int rightIndex) {
+    private static int[] quicksortMedianOf5(int[] array) {
+        return quicksortMedianOf5(array, new int[]{0, array.length - 1});
+    }
+
+    private static int[] quicksortMedianOf5(int[] array, int[] bounds) {
+        int temp;
+        int leftBound = bounds[LEFT_BOUND];
+        int rightBound = bounds[RIGHT_BOUND];
+
         //1. Pick a pivot.
-        if (rightIndex - leftIndex > 4) {
-            int[] randomIndices = new int[5];
-            randomIndices[0] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[1] == randomIndices[0]) {
-                randomIndices[1] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
-            randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[2] == randomIndices[0] || randomIndices[2] == randomIndices[1]) {
-                randomIndices[2] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
-            randomIndices[3] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[3] == randomIndices[0] || randomIndices[3] == randomIndices[1] || randomIndices[3] == randomIndices[2]) {
-                randomIndices[3] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
-            randomIndices[4] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            while (randomIndices[4] == randomIndices[0] || randomIndices[4] == randomIndices[1] || randomIndices[4] == randomIndices[2] || randomIndices[4] == randomIndices[3]) {
-                randomIndices[4] = (int) (Math.random() * (rightIndex - leftIndex + 1)) + leftIndex;
-            }
+        if (rightBound - leftBound > 4) {
+            final int[] randomIndices = new Random().ints(leftBound, rightBound + 1).distinct().limit(5).toArray();
+            int medianOf5Index = medianOf5Index(array, randomIndices);
 
-            int[] randomElements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]], array[randomIndices[3]], array[randomIndices[4]]};
-            int medianOf5Index = randomIndices[indexOfElementWithValue(medianOf5(Arrays.copyOf(randomElements, randomElements.length)), randomElements)];
-
-            int temp = array[medianOf5Index];
-            array[medianOf5Index] = array[rightIndex];
-            array[rightIndex] = temp;
+            temp = array[medianOf5Index];
+            array[medianOf5Index] = array[rightBound];
+            array[rightBound] = temp;
         }
 
-        int pivot = array[rightIndex]; //Pivot is last element in array.
-        int[] left = new int[]{leftIndex, leftIndex};
-        int[] right = new int[]{leftIndex, leftIndex};
+        int pivot = array[rightBound]; //Pivot is last element in array.
+        int[] lesserValues = new int[]{leftBound, leftBound};
+        int[] greaterValues = new int[]{leftBound, leftBound};
 
         //2. Partition the array.
-        for (int i = leftIndex; i < rightIndex; i++) {
-            if (array[i] < pivot) {
-                int tmp = array[right[LEFT]];
-                array[right[LEFT]] = array[right[RIGHT]];
-                array[right[RIGHT]] = tmp;
+        for (int currentIndex = leftBound; currentIndex < rightBound; currentIndex++) {
+            if (array[currentIndex] < pivot) {
+                temp = array[greaterValues[LEFT_BOUND]];
+                array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
+                array[greaterValues[RIGHT_BOUND]] = temp;
 
-                right[RIGHT]++;
-                right[LEFT]++;
-                left[RIGHT]++;
+                lesserValues[RIGHT_BOUND]++;
+                greaterValues[LEFT_BOUND]++;
+                greaterValues[RIGHT_BOUND]++;
             } else {
-                right[RIGHT]++;
+                greaterValues[RIGHT_BOUND]++;
             }
         }
 
         //3. Insert Pivot.
-        int tmp = array[rightIndex];
-        array[rightIndex] = array[right[LEFT]];
-        array[right[LEFT]] = tmp;
+        temp = array[rightBound];
+        array[rightBound] = array[greaterValues[LEFT_BOUND]];
+        array[greaterValues[LEFT_BOUND]] = temp;
 
-        right[RIGHT]++;
-        right[LEFT]++;
+        greaterValues[RIGHT_BOUND]++;
+        greaterValues[LEFT_BOUND]++;
 
-        //4. Repeat for left subarray recursively.
-        if (left[RIGHT] - left[LEFT] > 1) {
-            array = quicksortMedianOf5(array, left[LEFT], left[RIGHT] - 1);
+        //4. Repeat for lesserValues subarray recursively.
+        if (lesserValues[RIGHT_BOUND] - lesserValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{lesserValues[LEFT_BOUND], lesserValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
-        //5. Repeat for right subarray recursively.
-        if (right[RIGHT] - right[LEFT] > 1) {
-            array = quicksortMedianOf5(array, right[LEFT], right[RIGHT] - 1);
+        //5. Repeat for greaterValues subarray recursively.
+        if (greaterValues[RIGHT_BOUND] - greaterValues[LEFT_BOUND] > 1) {
+            bounds = new int[]{greaterValues[LEFT_BOUND], greaterValues[RIGHT_BOUND] - 1};
+            array = quicksortOriginal(array, bounds);
         }
 
         return array;
+    }
+
+    private static int medianOf3Index(int[] array, int[] randomIndices) {
+        int[] elements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]]};
+
+        final int A = 0;
+        final int B = 1;
+        final int C = 2;
+
+        int medianOf3Index;
+
+        if (elements[A] < elements[B]) { //1
+            if (elements[B] < elements[C]) { //2
+                medianOf3Index = B;
+            } else {
+                if (elements[A] < elements[C]) { //3
+                    medianOf3Index = C;
+                } else {
+                    medianOf3Index = A;
+                }
+            }
+        } else {
+            if (elements[B] < elements[C]) { //2
+                if (elements[A] < elements[C]) { //3
+                    medianOf3Index = A;
+                } else {
+                    medianOf3Index = C;
+                }
+            } else {
+                medianOf3Index = B;
+            }
+        }
+
+        return randomIndices[medianOf3Index];
+    }
+
+    private static int medianOf5Index(int[] array, int[] randomIndices) {
+        int[] elements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]], array[randomIndices[3]], array[randomIndices[4]]};
+
+        final int A = 0;
+        final int B = 1;
+        final int C = 2;
+        final int D = 3;
+        final int E = 4;
+
+        int medianOf5Index;
+
+        if (elements[A] > elements[B]) { //1
+            int tmp = elements[A];
+            elements[A] = elements[B];
+            elements[B] = tmp;
+        }
+
+        if (elements[C] > elements[D]) { //2
+            int tmp = elements[C];
+            elements[C] = elements[D];
+            elements[D] = tmp;
+        }
+
+        if (elements[A] > elements[C]) { //3
+            int tmp = elements[B];
+            elements[B] = elements[D];
+            elements[D] = tmp;
+
+            elements[C] = elements[A];
+        }
+
+        elements[A] = elements[E];
+
+        if (elements[A] > elements[B]) { //4
+            int tmp = elements[A];
+            elements[A] = elements[B];
+            elements[B] = tmp;
+        }
+
+        if (elements[C] > elements[A]) { //5
+            int tmp = elements[B];
+            elements[B] = elements[D];
+            elements[D] = tmp;
+
+            elements[A] = elements[C];
+        }
+
+        if (elements[D] > elements[A]) { //6
+            medianOf5Index = A;
+        } else {
+            medianOf5Index = D;
+        }
+
+        return randomIndices[medianOf5Index];
     }
 
     //This function is responsible for randomly generating the data. All hard coded values are per the project specification.
@@ -361,69 +434,5 @@ public class Quicksort {
 
         //If we made it here...
         return true; //Then this array is sorted in ascending order. Return true.
-    }
-
-    private static int medianOf5(int[] array) {
-        final int A = 0;
-        final int B = 1;
-        final int C = 2;
-        final int D = 3;
-        final int E = 4;
-
-        int index = A;
-
-        if (array[A] > array[B]) {
-            int tmp = array[A];
-            array[A] = array[B];
-            array[B] = tmp;
-        }
-
-        if (array[C] > array[D]) {
-            int tmp = array[C];
-            array[C] = array[D];
-            array[D] = tmp;
-        }
-
-        if (array[C] < array[A]) {
-            int tmp = array[B];
-            array[B] = array[D];
-            array[D] = tmp;
-
-            array[C] = array[A];
-        }
-
-        array[A] = array[E];
-
-        if (array[A] > array[B]) {
-            int tmp = array[A];
-            array[A] = array[B];
-            array[B] = tmp;
-        }
-
-        if (array[A] < array[C]) {
-            int tmp = array[B];
-            array[B] = array[D];
-            array[D] = tmp;
-
-            array[A] = array[C];
-        }
-
-        if (array[A] < array[D]) {
-            index = array[A];
-        } else {
-            index = array[D];
-        }
-
-        return index;
-    }
-
-    private static int indexOfElementWithValue(int value, int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == value) {
-                return i;
-            }
-        }
-
-        return -1;
     }
 }
