@@ -22,6 +22,12 @@ public class Quicksort {
     private static final int LEFT_BOUND = 0;
     private static final int RIGHT_BOUND = 1;
 
+    public static void matin(String[] args) {
+        int[] array = new int[]{4, 6, 8, 2, 5, 1, 7, 4, 17, 12, 10, 3, 18};
+
+//        System.out.println(medianOf5Index(array, new int[]{0, 1, 2, 3, 4}));
+    }
+
     public static void main(String[] args) {
         int[] randomIntArray = generateArrayData("random");
         int randomIntArrayComparisons = 0;
@@ -178,6 +184,7 @@ public class Quicksort {
                 temp = array[greaterValues[LEFT_BOUND]];
                 array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
                 array[greaterValues[RIGHT_BOUND]] = temp;
+                quicksortObject.swaps++;
 
                 lesserValues[RIGHT_BOUND]++;
                 greaterValues[LEFT_BOUND]++;
@@ -185,12 +192,14 @@ public class Quicksort {
             } else {
                 greaterValues[RIGHT_BOUND]++;
             }
+            quicksortObject.comparisons++;
         }
 
         //3. Insert Pivot.
         temp = array[rightBound];
         array[rightBound] = array[greaterValues[LEFT_BOUND]];
         array[greaterValues[LEFT_BOUND]] = temp;
+        quicksortObject.swaps++;
 
         greaterValues[RIGHT_BOUND]++;
         greaterValues[LEFT_BOUND]++;
@@ -236,6 +245,7 @@ public class Quicksort {
                 temp = array[greaterValues[LEFT_BOUND]];
                 array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
                 array[greaterValues[RIGHT_BOUND]] = temp;
+                quicksortObject.swaps++;
 
                 lesserValues[RIGHT_BOUND]++;
                 greaterValues[LEFT_BOUND]++;
@@ -243,12 +253,14 @@ public class Quicksort {
             } else {
                 greaterValues[RIGHT_BOUND]++;
             }
+            quicksortObject.comparisons++;
         }
 
         //3. Insert Pivot.
         temp = array[rightBound];
         array[rightBound] = array[greaterValues[LEFT_BOUND]];
         array[greaterValues[LEFT_BOUND]] = temp;
+        quicksortObject.swaps++;
 
         greaterValues[RIGHT_BOUND]++;
         greaterValues[LEFT_BOUND]++;
@@ -281,11 +293,12 @@ public class Quicksort {
         //1. Pick a pivot.
         if (rightBound - leftBound > 2) {
             final int[] randomIndices = new Random().ints(leftBound, rightBound + 1).distinct().limit(3).toArray();
-            int medianOf3Index = medianOf3Index(array, randomIndices);
+            int medianOf3Index = medianOf3Index(array, randomIndices, quicksortObject);
 
             temp = array[medianOf3Index];
             array[medianOf3Index] = array[rightBound];
             array[rightBound] = temp;
+            quicksortObject.swaps++;
         }
 
         int pivot = array[rightBound]; //Pivot is last element in array.
@@ -298,6 +311,7 @@ public class Quicksort {
                 temp = array[greaterValues[LEFT_BOUND]];
                 array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
                 array[greaterValues[RIGHT_BOUND]] = temp;
+                quicksortObject.swaps++;
 
                 lesserValues[RIGHT_BOUND]++;
                 greaterValues[LEFT_BOUND]++;
@@ -305,12 +319,14 @@ public class Quicksort {
             } else {
                 greaterValues[RIGHT_BOUND]++;
             }
+            quicksortObject.comparisons++;
         }
 
         //3. Insert Pivot.
         temp = array[rightBound];
         array[rightBound] = array[greaterValues[LEFT_BOUND]];
         array[greaterValues[LEFT_BOUND]] = temp;
+        quicksortObject.swaps++;
 
         greaterValues[RIGHT_BOUND]++;
         greaterValues[LEFT_BOUND]++;
@@ -343,11 +359,12 @@ public class Quicksort {
         //1. Pick a pivot.
         if (rightBound - leftBound > 4) {
             final int[] randomIndices = new Random().ints(leftBound, rightBound + 1).distinct().limit(5).toArray();
-            int medianOf5Index = medianOf5Index(array, randomIndices);
+            int medianOf5Index = medianOf5Index(array, randomIndices, quicksortObject);
 
             temp = array[medianOf5Index];
             array[medianOf5Index] = array[rightBound];
             array[rightBound] = temp;
+            quicksortObject.swaps++;
         }
 
         int pivot = array[rightBound]; //Pivot is last element in array.
@@ -360,6 +377,7 @@ public class Quicksort {
                 temp = array[greaterValues[LEFT_BOUND]];
                 array[greaterValues[LEFT_BOUND]] = array[greaterValues[RIGHT_BOUND]];
                 array[greaterValues[RIGHT_BOUND]] = temp;
+                quicksortObject.swaps++;
 
                 lesserValues[RIGHT_BOUND]++;
                 greaterValues[LEFT_BOUND]++;
@@ -367,12 +385,14 @@ public class Quicksort {
             } else {
                 greaterValues[RIGHT_BOUND]++;
             }
+            quicksortObject.comparisons++;
         }
 
         //3. Insert Pivot.
         temp = array[rightBound];
         array[rightBound] = array[greaterValues[LEFT_BOUND]];
         array[greaterValues[LEFT_BOUND]] = temp;
+        quicksortObject.swaps++;
 
         greaterValues[RIGHT_BOUND]++;
         greaterValues[LEFT_BOUND]++;
@@ -390,7 +410,7 @@ public class Quicksort {
         }
     }
 
-    private static int medianOf3Index(int[] array, int[] randomIndices) {
+    private static int medianOf3Index(int[] array, int[] randomIndices, QuicksortObject quicksortObject) {
         int[] elements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]]};
 
         final int A = 0;
@@ -400,23 +420,33 @@ public class Quicksort {
         int medianOf3Index;
 
         if (elements[A] < elements[B]) { //1
+            quicksortObject.comparisons++;
             if (elements[B] < elements[C]) { //2
+                quicksortObject.comparisons++;
                 medianOf3Index = B;
             } else {
+                quicksortObject.comparisons++;
                 if (elements[A] < elements[C]) { //3
+                    quicksortObject.comparisons++;
                     medianOf3Index = C;
                 } else {
+                    quicksortObject.comparisons++;
                     medianOf3Index = A;
                 }
             }
         } else {
+            quicksortObject.comparisons++;
             if (elements[B] < elements[C]) { //2
+                quicksortObject.comparisons++;
                 if (elements[A] < elements[C]) { //3
+                    quicksortObject.comparisons++;
                     medianOf3Index = A;
                 } else {
+                    quicksortObject.comparisons++;
                     medianOf3Index = C;
                 }
             } else {
+                quicksortObject.comparisons++;
                 medianOf3Index = B;
             }
         }
@@ -424,7 +454,7 @@ public class Quicksort {
         return randomIndices[medianOf3Index];
     }
 
-    private static int medianOf5Index(int[] array, int[] randomIndices) {
+    private static int medianOf5Index(int[] array, int[] randomIndices, QuicksortObject quicksortObject) {
         int[] elements = new int[]{array[randomIndices[0]], array[randomIndices[1]], array[randomIndices[2]], array[randomIndices[3]], array[randomIndices[4]]};
 
         final int A = 0;
@@ -440,12 +470,14 @@ public class Quicksort {
             elements[A] = elements[B];
             elements[B] = tmp;
         }
+        quicksortObject.comparisons++;
 
         if (elements[C] > elements[D]) { //2
             int tmp = elements[C];
             elements[C] = elements[D];
             elements[D] = tmp;
         }
+        quicksortObject.comparisons++;
 
         if (elements[A] > elements[C]) { //3
             int tmp = elements[B];
@@ -454,6 +486,7 @@ public class Quicksort {
 
             elements[C] = elements[A];
         }
+        quicksortObject.comparisons++;
 
         elements[A] = elements[E];
 
@@ -462,6 +495,7 @@ public class Quicksort {
             elements[A] = elements[B];
             elements[B] = tmp;
         }
+        quicksortObject.comparisons++;
 
         if (elements[C] > elements[A]) { //5
             int tmp = elements[B];
@@ -470,12 +504,14 @@ public class Quicksort {
 
             elements[A] = elements[C];
         }
+        quicksortObject.comparisons++;
 
         if (elements[D] > elements[A]) { //6
             medianOf5Index = A;
         } else {
             medianOf5Index = D;
         }
+        quicksortObject.comparisons++;
 
         for (int i = 0; i < elements.length; i++) {
             if (elements[medianOf5Index] == array[randomIndices[i]]) {
