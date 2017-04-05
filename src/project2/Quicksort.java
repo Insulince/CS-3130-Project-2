@@ -2,12 +2,9 @@
 
 package project2;
 
-import com.sun.xml.internal.bind.v2.model.annotation.Quick;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class Quicksort {
     private static final int RANDOM = 0;
@@ -21,12 +18,6 @@ public class Quicksort {
 
     private static final int LEFT_BOUND = 0;
     private static final int RIGHT_BOUND = 1;
-
-    public static void matin(String[] args) {
-        int[] array = new int[]{4, 6, 8, 2, 5, 1, 7, 4, 17, 12, 10, 3, 18};
-
-//        System.out.println(medianOf5Index(array, new int[]{0, 1, 2, 3, 4}));
-    }
 
     public static void main(String[] args) {
         int[] randomIntArray = generateArrayData("random");
@@ -66,24 +57,24 @@ public class Quicksort {
 
         QuicksortObject[][] quicksortObjects = new QuicksortObject[][]{
                 new QuicksortObject[]{
-                        new QuicksortObject("Original Quicksort on Random Array", originalQuicksortArrays[RANDOM], originalQuicksortComparisons[RANDOM], originalQuicksortSwaps[RANDOM], originalQuicksortDurations[RANDOM]),
-                        new QuicksortObject("Original Quicksort on Array in Ascending Order", originalQuicksortArrays[ASCENDING], originalQuicksortComparisons[ASCENDING], originalQuicksortSwaps[ASCENDING], originalQuicksortDurations[ASCENDING]),
-                        new QuicksortObject("Original Quicksort on Array in Descending Order", originalQuicksortArrays[DESCENDING], originalQuicksortComparisons[DESCENDING], originalQuicksortSwaps[DESCENDING], originalQuicksortDurations[DESCENDING])
+                        new QuicksortObject("Original Quicksort on Random Array", Arrays.copyOf(originalQuicksortArrays[RANDOM], originalQuicksortArrays[RANDOM].length), originalQuicksortComparisons[RANDOM], originalQuicksortSwaps[RANDOM], originalQuicksortDurations[RANDOM]),
+                        new QuicksortObject("Original Quicksort on Array in Ascending Order", Arrays.copyOf(originalQuicksortArrays[ASCENDING], originalQuicksortArrays[ASCENDING].length), originalQuicksortComparisons[ASCENDING], originalQuicksortSwaps[ASCENDING], originalQuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Original Quicksort on Array in Descending Order", Arrays.copyOf(originalQuicksortArrays[DESCENDING], originalQuicksortArrays[DESCENDING].length), originalQuicksortComparisons[DESCENDING], originalQuicksortSwaps[DESCENDING], originalQuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject("Randomization Quicksort on Random Array", randomizationQuicksortArrays[RANDOM], randomizationQuicksortComparisons[RANDOM], randomizationQuicksortSwaps[RANDOM], randomizationQuicksortDurations[RANDOM]),
-                        new QuicksortObject("Randomization Quicksort on Array in Ascending Order", randomizationQuicksortArrays[ASCENDING], randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortSwaps[ASCENDING], randomizationQuicksortDurations[ASCENDING]),
-                        new QuicksortObject("Randomization Quicksort on Array in Descending Order", randomizationQuicksortArrays[DESCENDING], randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortSwaps[DESCENDING], randomizationQuicksortDurations[DESCENDING])
+                        new QuicksortObject("Randomization Quicksort on Random Array", Arrays.copyOf(randomizationQuicksortArrays[RANDOM], randomizationQuicksortArrays[RANDOM].length), randomizationQuicksortComparisons[RANDOM], randomizationQuicksortSwaps[RANDOM], randomizationQuicksortDurations[RANDOM]),
+                        new QuicksortObject("Randomization Quicksort on Array in Ascending Order", Arrays.copyOf(randomizationQuicksortArrays[ASCENDING], randomizationQuicksortArrays[ASCENDING].length), randomizationQuicksortComparisons[ASCENDING], randomizationQuicksortSwaps[ASCENDING], randomizationQuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Randomization Quicksort on Array in Descending Order", Arrays.copyOf(randomizationQuicksortArrays[DESCENDING], randomizationQuicksortArrays[DESCENDING].length), randomizationQuicksortComparisons[DESCENDING], randomizationQuicksortSwaps[DESCENDING], randomizationQuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject("Median of 3 Quicksort on Random Array", medianOf3QuicksortArrays[RANDOM], medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortSwaps[RANDOM], medianOf3QuicksortDurations[RANDOM]),
-                        new QuicksortObject("Median of 3 Quicksort on Array in Ascending Order", medianOf3QuicksortArrays[ASCENDING], medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortSwaps[ASCENDING], medianOf3QuicksortDurations[ASCENDING]),
-                        new QuicksortObject("Median of 3 Quicksort on Array in Descending Order", medianOf3QuicksortArrays[DESCENDING], medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortSwaps[DESCENDING], medianOf3QuicksortDurations[DESCENDING])
+                        new QuicksortObject("Median of 3 Quicksort on Random Array", Arrays.copyOf(medianOf3QuicksortArrays[RANDOM], medianOf3QuicksortArrays[RANDOM].length), medianOf3QuicksortComparisons[RANDOM], medianOf3QuicksortSwaps[RANDOM], medianOf3QuicksortDurations[RANDOM]),
+                        new QuicksortObject("Median of 3 Quicksort on Array in Ascending Order", Arrays.copyOf(medianOf3QuicksortArrays[ASCENDING], medianOf3QuicksortArrays[ASCENDING].length), medianOf3QuicksortComparisons[ASCENDING], medianOf3QuicksortSwaps[ASCENDING], medianOf3QuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Median of 3 Quicksort on Array in Descending Order", Arrays.copyOf(medianOf3QuicksortArrays[DESCENDING], medianOf3QuicksortArrays[DESCENDING].length), medianOf3QuicksortComparisons[DESCENDING], medianOf3QuicksortSwaps[DESCENDING], medianOf3QuicksortDurations[DESCENDING])
                 },
                 new QuicksortObject[]{
-                        new QuicksortObject("Median of 5 Quicksort on Random Array", medianOf5QuicksortArrays[RANDOM], medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortSwaps[RANDOM], medianOf5QuicksortDurations[RANDOM]),
-                        new QuicksortObject("Median of 5 Quicksort on Array in Ascending Order", medianOf5QuicksortArrays[ASCENDING], medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortSwaps[ASCENDING], medianOf5QuicksortDurations[ASCENDING]),
-                        new QuicksortObject("Median of 5 Quicksort on Array in Descending Order", medianOf5QuicksortArrays[DESCENDING], medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortSwaps[DESCENDING], medianOf5QuicksortDurations[DESCENDING])
+                        new QuicksortObject("Median of 5 Quicksort on Random Array", Arrays.copyOf(medianOf5QuicksortArrays[RANDOM], medianOf5QuicksortArrays[RANDOM].length), medianOf5QuicksortComparisons[RANDOM], medianOf5QuicksortSwaps[RANDOM], medianOf5QuicksortDurations[RANDOM]),
+                        new QuicksortObject("Median of 5 Quicksort on Array in Ascending Order", Arrays.copyOf(medianOf5QuicksortArrays[ASCENDING], medianOf5QuicksortArrays[ASCENDING].length), medianOf5QuicksortComparisons[ASCENDING], medianOf5QuicksortSwaps[ASCENDING], medianOf5QuicksortDurations[ASCENDING]),
+                        new QuicksortObject("Median of 5 Quicksort on Array in Descending Order", Arrays.copyOf(medianOf5QuicksortArrays[DESCENDING], medianOf5QuicksortArrays[DESCENDING].length), medianOf5QuicksortComparisons[DESCENDING], medianOf5QuicksortSwaps[DESCENDING], medianOf5QuicksortDurations[DESCENDING])
                 },
         };
 
@@ -125,6 +116,15 @@ public class Quicksort {
         displayArrayData(quicksortObjects[RANDOMIZATION][DESCENDING]);
 
         System.out.println("\n========= MEDIAN OF 3 QUICKSORT IMPLEMENTATION ==========");
+
+        /* The following line is the nicest solution I could find for a massive bug that plagues me to this day. I do not understand the behavior observed, but this is the best I can do
+         * to resolve it. If you were to uncomment the following line of code, the next segment's timer will be incorrect by orders of magnitude. It has me absolutely dumbfounded. Go
+         * ahead and try it if you feel so obliged. When you comment the line out and run the program, the duration section of the results will list "Median of 3 Quicksort on Random
+         * Array" as having a time ~15 times worse than the next worse time. Uncomment the line and you will find this issue is resolved. It makes no sense. It appears to be a bug in
+         * Java or the System itself, because when you shift these blocks of 4 lines of code around, the bug attaches to whichever block of code would have been following this comment
+         * (the 7th block to execute). The reason I believe that this line fixes this issue is because it really doesn't, it simply takes advantage of the fact that the bug shifts to
+         * whichever quicksort block is executing, so this mimics a quicksort block by doing a sort on a dummy QuicksortObject to appease the bug, then moving on bug-free. */
+        quicksortMedianOf3(new QuicksortObject());
 
         introduce(quicksortObjects[MEDIAN_OF_3][RANDOM]);
         quicksortMedianOf3(quicksortObjects[MEDIAN_OF_3][RANDOM]);
@@ -419,39 +419,33 @@ public class Quicksort {
 
         int medianOf3Index;
 
-        if (elements[A] < elements[B]) { //1
-            quicksortObject.comparisons++;
-            if (elements[B] < elements[C]) { //2
-                quicksortObject.comparisons++;
-                medianOf3Index = B;
-            } else {
-                quicksortObject.comparisons++;
-                if (elements[A] < elements[C]) { //3
-                    quicksortObject.comparisons++;
-                    medianOf3Index = C;
-                } else {
-                    quicksortObject.comparisons++;
-                    medianOf3Index = A;
-                }
-            }
+        if (elements[A] > elements[B]) { //1
+            int tmp = elements[A];
+            elements[A] = elements[B];
+            elements[B] = tmp;
+            quicksortObject.swaps++;
+        }
+        quicksortObject.comparisons++;
+
+        if (elements[C] > elements[B]) { //2
+            elements[C] = elements[B];
+        }
+        quicksortObject.comparisons++;
+
+        if (elements[A] > elements[C]) { //3
+            medianOf3Index = A;
         } else {
-            quicksortObject.comparisons++;
-            if (elements[B] < elements[C]) { //2
-                quicksortObject.comparisons++;
-                if (elements[A] < elements[C]) { //3
-                    quicksortObject.comparisons++;
-                    medianOf3Index = A;
-                } else {
-                    quicksortObject.comparisons++;
-                    medianOf3Index = C;
-                }
-            } else {
-                quicksortObject.comparisons++;
-                medianOf3Index = B;
+            medianOf3Index = C;
+        }
+        quicksortObject.comparisons++;
+
+        for (int i = 0; i < elements.length; i++) {
+            if (elements[medianOf3Index] == array[randomIndices[i]]) {
+                return randomIndices[i];
             }
         }
 
-        return randomIndices[medianOf3Index];
+        throw new RuntimeException("ERROR: Something went wrong with the Median of 3 function!");
     }
 
     private static int medianOf5Index(int[] array, int[] randomIndices, QuicksortObject quicksortObject) {
@@ -469,6 +463,7 @@ public class Quicksort {
             int tmp = elements[A];
             elements[A] = elements[B];
             elements[B] = tmp;
+            quicksortObject.swaps++;
         }
         quicksortObject.comparisons++;
 
@@ -476,6 +471,7 @@ public class Quicksort {
             int tmp = elements[C];
             elements[C] = elements[D];
             elements[D] = tmp;
+            quicksortObject.swaps++;
         }
         quicksortObject.comparisons++;
 
@@ -483,6 +479,7 @@ public class Quicksort {
             int tmp = elements[B];
             elements[B] = elements[D];
             elements[D] = tmp;
+            quicksortObject.swaps++;
 
             elements[C] = elements[A];
         }
@@ -494,6 +491,7 @@ public class Quicksort {
             int tmp = elements[A];
             elements[A] = elements[B];
             elements[B] = tmp;
+            quicksortObject.swaps++;
         }
         quicksortObject.comparisons++;
 
@@ -501,6 +499,7 @@ public class Quicksort {
             int tmp = elements[B];
             elements[B] = elements[D];
             elements[D] = tmp;
+            quicksortObject.swaps++;
 
             elements[A] = elements[C];
         }
@@ -515,11 +514,11 @@ public class Quicksort {
 
         for (int i = 0; i < elements.length; i++) {
             if (elements[medianOf5Index] == array[randomIndices[i]]) {
-                    return randomIndices[i];
+                return randomIndices[i];
             }
         }
 
-        return -1;
+        throw new RuntimeException("ERROR: Somethin went wrong with the Median of 5 function!");
     }
 
     //This function is responsible for randomly generating the data. All hard coded values are per the project specification.
@@ -672,5 +671,13 @@ class QuicksortObject {
         this.comparisons = comparisons;
         this.swaps = swaps;
         this.duration = duration;
+    }
+
+    QuicksortObject() {
+        this.name = "";
+        this.array = new int[1000];
+        this.comparisons = 0;
+        this.swaps = 0;
+        this.duration = 0;
     }
 }
